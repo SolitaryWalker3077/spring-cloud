@@ -1,8 +1,10 @@
 package com.product.demo.controller;
 
 
-import com.product.demo.model.ProductInfo;
+
 import com.product.demo.service.ProductService;
+import com.productapi.demo.api.ProductInterface;
+import com.productapi.demo.model.ProductInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/product")
 @RestController
-public class ProductController {
+public class ProductController implements ProductInterface {
     @Autowired
     private ProductService productService;
 

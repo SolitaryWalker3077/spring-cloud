@@ -3,7 +3,7 @@ package com.order.demo.service;
 import com.order.demo.api.ProductApi;
 import com.order.demo.mapper.OrderMapper;
 import com.order.demo.model.OrderInfo;
-import com.order.demo.model.ProductInfo;
+import com.productapi.demo.model.ProductInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -23,7 +23,7 @@ public class OrderService {
         OrderInfo orderInfo = orderMapper.selectOrderById(orderId);
 //        String url = "http://product-service/product/"+orderInfo.getProductId();
 //        ProductInfo productInfo = restTemplate.getForObject(url, ProductInfo.class);
-        ProductInfo productInfo = productApi.getProductInfo(orderInfo.getProductId());
+        ProductInfo productInfo = productApi.getProductById(orderInfo.getProductId());
         orderInfo.setProductInfo(productInfo);
         return orderInfo;
     }

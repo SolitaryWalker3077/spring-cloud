@@ -1,7 +1,7 @@
 package com.product.demo.service;
 
 import com.product.demo.mapper.ProductMapper;
-import com.product.demo.model.ProductInfo;
+import com.productapi.demo.model.ProductInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

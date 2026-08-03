@@ -1,5 +1,6 @@
 package com.order.demo.model;
 
+import com.productapi.demo.model.ProductInfo;
 import lombok.Data;
 
 import java.util.Date;

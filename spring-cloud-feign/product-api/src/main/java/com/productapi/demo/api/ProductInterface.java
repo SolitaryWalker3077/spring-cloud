@@ -1,0 +1,29 @@
+package com.productapi.demo.api;
+
+import com.productapi.demo.model.ProductInfo;
+import org.springframework.cloud.openfeign.SpringQueryMap;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+public interface ProductInterface {
+
+    @RequestMapping("/{productId}")
+    ProductInfo getProductById(@PathVariable("productId") Integer productId);
+
+    @RequestMapping("/p1")
+    String p1(@RequestParam("id") Integer id);
+
+
+    @RequestMapping("/p2")
+    public String p2(@RequestParam("id") Integer id ,@RequestParam("name") String name);
+
+    @RequestMapping("/p3")
+    public String p3(@SpringQueryMap ProductInfo productInfo);
+
+    @RequestMapping("/p4")
+    public String p4(@RequestBody ProductInfo productInfo);
+
+
+}

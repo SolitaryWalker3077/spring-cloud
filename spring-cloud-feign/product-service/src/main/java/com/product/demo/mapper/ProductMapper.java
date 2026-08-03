@@ -1,6 +1,7 @@
 package com.product.demo.mapper;
 
-import com.product.demo.model.ProductInfo;
+
+import com.productapi.demo.model.ProductInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
