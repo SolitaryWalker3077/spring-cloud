@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: product-service
+  cloud:
+    nacos:
+      config:
+        server-addr: 43.140.242.83:8848
+        file-extension: yaml
+#        namespace: 8a61ef37-2daa-402f-8b1d-5363629c5c87   #配置中心的命名空间
