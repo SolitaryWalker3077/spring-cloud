@@ -14,7 +14,28 @@ spring:
           uri: lb://order-service/ #⽬标服务地址
           predicates: #路由条件
             - Path=/order/** , /feign/**
+          filters:
+              - AddRequestParameter=userName, bite
+              - name: Custom    #过滤器名称
+                args:
+                  name: test_custom
         - id: product-service
           uri: lb://product-service/
           predicates:
             - Path=/product/**
+      default-filters:
+        - name: Retry
+          args:
+            retries: 3
+            statuses: BAD_GATEWAY
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true

@@ -18,7 +18,8 @@ public class FeignController {
     private ProductApi productApi;
 
     @RequestMapping("/o1")
-    public String o1(Integer id) {
+    public String o1(Integer id,String userName) {
+        log.info("接受到过滤器添加的参数,userName:{}",userName);
         return productApi.p1(id);
     }
 
