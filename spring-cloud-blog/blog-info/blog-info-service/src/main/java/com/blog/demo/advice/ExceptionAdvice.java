@@ -1,4 +1,4 @@
-package com.blog.demo.config;
+package com.blog.demo.advice;
 
 
 import com.common.demo.exception.BlogException;
