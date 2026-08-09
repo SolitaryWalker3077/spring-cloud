@@ -13,7 +13,7 @@
     <modules>
         <module>blog-common</module>
         <module>blog-info</module>
-        <module>gataway-service</module>
+        <module>gateway-service</module>
         <module>user-info</module>
     </modules>
 
