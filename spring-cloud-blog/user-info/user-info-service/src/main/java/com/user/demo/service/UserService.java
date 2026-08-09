@@ -1,6 +1,7 @@
 package com.user.demo.service;
 
 
+import com.user.api.demo.pojo.request.UserInfoRegisterRequest;
 import com.user.api.demo.pojo.request.UserInfoRequest;
 import com.user.api.demo.pojo.response.UserInfoResponse;
 import com.user.api.demo.pojo.response.UserLoginResponse;
@@ -11,4 +12,6 @@ public interface UserService {
     UserInfoResponse getUserInfo(Integer userId);
 
     UserInfoResponse selectAuthorInfoByBlogId(Integer blogId);
+
+    Integer register(UserInfoRegisterRequest registerRequest);
 }

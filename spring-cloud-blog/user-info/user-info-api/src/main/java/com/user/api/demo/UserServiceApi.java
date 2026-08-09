@@ -2,14 +2,14 @@ package com.user.api.demo;
 
 
 import com.common.demo.pojo.Result;
+import com.user.api.demo.pojo.request.UserInfoRegisterRequest;
 import com.user.api.demo.pojo.request.UserInfoRequest;
 import com.user.api.demo.pojo.response.UserInfoResponse;
 import com.user.api.demo.pojo.response.UserLoginResponse;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @FeignClient(value = "user-service", path = "/user")
 public interface UserServiceApi {
@@ -20,4 +20,7 @@ public interface UserServiceApi {
     Result<UserInfoResponse> getUserInfo(@RequestParam("userId") Integer userId);
     @RequestMapping("/getAuthorInfo")
     Result<UserInfoResponse> getAuthorInfo(@RequestParam("blogId") Integer blogId);
+
+    @RequestMapping("/register")
+    Result<Integer> register(@RequestBody UserInfoRegisterRequest registerRequest);
 }

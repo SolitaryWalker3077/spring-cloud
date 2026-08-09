@@ -3,6 +3,7 @@ package com.user.demo.controller;
 
 import com.common.demo.pojo.Result;
 import com.user.api.demo.UserServiceApi;
+import com.user.api.demo.pojo.request.UserInfoRegisterRequest;
 import com.user.api.demo.pojo.request.UserInfoRequest;
 import com.user.api.demo.pojo.response.UserInfoResponse;
 import com.user.api.demo.pojo.response.UserLoginResponse;
@@ -23,17 +24,22 @@ public class UserController implements UserServiceApi {
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/login")
+    @Override
     public Result<UserLoginResponse> login(@Validated @RequestBody UserInfoRequest user){
         log.info("用户登录, userName: {}", user.getUserName());
         return Result.success(userService.login(user)) ;
     }
-    @RequestMapping("/getUserInfo")
+    @Override
     public Result<UserInfoResponse> getUserInfo(@NotNull Integer userId){
         return Result.success(userService.getUserInfo(userId));
     }
-    @RequestMapping("/getAuthorInfo")
+    @Override
     public Result<UserInfoResponse> getAuthorInfo(@NotNull Integer blogId){
         return Result.success(userService.selectAuthorInfoByBlogId(blogId));
+    }
+
+    @Override
+    public Result register(@Validated @RequestBody UserInfoRegisterRequest registerRequest) {
+        return Result.success(userService.register(registerRequest));
     }
 }

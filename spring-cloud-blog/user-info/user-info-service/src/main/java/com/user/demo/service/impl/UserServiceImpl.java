@@ -7,12 +7,15 @@ import com.common.demo.exception.BlogException;
 import com.common.demo.pojo.Result;
 import com.common.demo.utils.JWTUtils;
 import com.common.demo.utils.SecurityUtil;
+import com.user.api.demo.pojo.request.UserInfoRegisterRequest;
 import com.user.api.demo.pojo.request.UserInfoRequest;
 import com.user.api.demo.pojo.response.UserInfoResponse;
 import com.user.api.demo.pojo.response.UserLoginResponse;
+import com.user.demo.convert.BeanConvert;
 import com.user.demo.dataobject.UserInfo;
 import com.user.demo.mapper.UserInfoMapper;
 import com.user.demo.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -72,6 +76,35 @@ public class UserServiceImpl implements UserService {
         UserInfo userInfo = selectUserInfoById(blogDeatail.getData().getUserId());
         BeanUtils.copyProperties(userInfo, userInfoResponse);
         return userInfoResponse;
+    }
+
+    @Override
+    public Integer register(UserInfoRegisterRequest registerRequest) {
+        checkUserInfo(registerRequest);
+        //用户注册插入数据库
+        UserInfo userInfo = BeanConvert.convertUserInfoByEncrypt(registerRequest);
+
+        try {
+            int row = userInfoMapper.insert(userInfo);
+            if(row == 1) {
+                return userInfo.getId();
+            }else {
+                throw new BlogException("用户注册失败");
+            }
+        }catch (Exception e) {
+            log.error("用户注册失败,e",e);
+            throw new BlogException("用户注册失败");
+        }
+    }
+
+    private void checkUserInfo(UserInfoRegisterRequest param) {
+        //用户名不能重复
+        UserInfo userInfo = selectUserInfoByName(param.getUserName());
+        if(userInfo != null) {
+            throw new BlogException("用户名已存在");
+        }
+        //邮箱格式, url格式
+
     }
 
     public UserInfo selectUserInfoByName(String userName) {

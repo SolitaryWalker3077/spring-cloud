@@ -13,6 +13,7 @@ public class UserInfo {
     private String userName;
     private String password;
     private String githubUrl;
+    private String email;
     private Byte deleteFlag;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;

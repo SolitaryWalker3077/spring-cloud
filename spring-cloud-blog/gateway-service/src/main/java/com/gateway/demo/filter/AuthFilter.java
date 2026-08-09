@@ -4,6 +4,7 @@ package com.gateway.demo.filter;
 import com.common.demo.pojo.Result;
 import com.common.demo.utils.JWTUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gateway.demo.properties.AuthWhiteName;
 import io.jsonwebtoken.Claims;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -31,15 +32,18 @@ public class AuthFilter implements GlobalFilter, Ordered {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private AuthWhiteName authWhiteName;
+
     //配置白名单
-    private List<String> writeNames = List.of("/user/login", "/user/register");
+    //private List<String> writeNames = List.of("/user/login", "/user/register");
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         //配置白名单, 如果请求url为白名单, 则放行
         ServerHttpRequest request = exchange.getRequest();
         String path = request.getURI().getPath();
-        if (writeNames.contains(path)) {
+        if (match(path,authWhiteName.getUrl())) {
             //如果白名单当中包含path 放行
             return chain.filter(exchange);
         }
@@ -57,6 +61,13 @@ public class AuthFilter implements GlobalFilter, Ordered {
             return unauthorizedResponse(exchange,"令牌过期或者不合法");
         }
         return chain.filter(exchange);
+    }
+
+    private boolean match(String path, List<String> url) {
+        if(url == null || url.size() == 0) {
+            return false;
+        }
+        return url.contains(path);
     }
 
     @SneakyThrows
