@@ -6,6 +6,7 @@ import com.blog.api.demo.pojo.response.BlogInfoResponse;
 import com.common.demo.exception.BlogException;
 import com.common.demo.pojo.Result;
 import com.common.demo.utils.JWTUtils;
+import com.common.demo.utils.RegexUtil;
 import com.common.demo.utils.SecurityUtil;
 import com.user.api.demo.pojo.request.UserInfoRegisterRequest;
 import com.user.api.demo.pojo.request.UserInfoRequest;
@@ -104,7 +105,12 @@ public class UserServiceImpl implements UserService {
             throw new BlogException("用户名已存在");
         }
         //邮箱格式, url格式
-
+        if(!RegexUtil.checkMail(param.getEmail())) {
+            throw new BlogException("邮箱格式不合法");
+        }
+        if(!RegexUtil.checkURL(param.getGithubUrl())) {
+            throw new BlogException("githubUrl格式不合法");
+        }
     }
 
     public UserInfo selectUserInfoByName(String userName) {

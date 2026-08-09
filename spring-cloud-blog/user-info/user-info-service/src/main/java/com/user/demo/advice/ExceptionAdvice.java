@@ -19,6 +19,7 @@ public class ExceptionAdvice {
         log.error("发生异常, e: {}", e);
         return Result.fail(e.getMessage());
     }
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ExceptionHandler
     public Result handler(BlogException e){
         log.error("发生异常, e: {}", e);
@@ -28,6 +29,9 @@ public class ExceptionAdvice {
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public Result verifyHandle(Exception e){
         log.error("参数校验失败: {}", e.getMessage());
-        return Result.fail("参数校验失败 ");
+        MethodArgumentNotValidException exception = (MethodArgumentNotValidException) e;
+        //未做判空处理, 自行添加
+        String errorMessage = exception.getBindingResult().getFieldError().getDefaultMessage();
+        return Result.fail("参数校验失败:" + errorMessage);
     }
 }
