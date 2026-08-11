@@ -14,6 +14,6 @@ public class RedisClientTest {
 
     @Test
     void test(){
-        redis.set("aa", "ee");
+        redis.set("aa", "ff");
     }
 }

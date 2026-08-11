@@ -1,4 +1,4 @@
-package com.user.demo.config;
+package com.common.demo.config;
 
 
 import com.common.demo.utils.Redis;

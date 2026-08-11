@@ -1,13 +1,13 @@
 package com.user.demo.service.impl;
 
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.nacos.shaded.io.grpc.internal.JsonUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.blog.api.demo.BlogServiceApi;
 import com.blog.api.demo.pojo.response.BlogInfoResponse;
 import com.common.demo.exception.BlogException;
 import com.common.demo.pojo.Result;
-import com.common.demo.utils.JWTUtils;
-import com.common.demo.utils.RegexUtil;
-import com.common.demo.utils.SecurityUtil;
+import com.common.demo.utils.*;
 import com.user.api.demo.pojo.request.UserInfoRegisterRequest;
 import com.user.api.demo.pojo.request.UserInfoRequest;
 import com.user.api.demo.pojo.response.UserInfoResponse;
@@ -33,10 +33,17 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private BlogServiceApi blogServiceApi;
 
+    @Autowired
+    private Redis redis;
+
+    //超时时间为2周
+    private static final long EXPIRE_TIME = 14 * 24 * 60* 60;
+    private static final String USER_PREFIX = "user";
+
     @Override
     public UserLoginResponse login(UserInfoRequest user) {
         //验证账号密码是否正确
-        UserInfo userInfo = selectUserInfoByName(user.getUserName());
+        UserInfo userInfo = queryUserInfo(user.getUserName());
         if (userInfo==null || userInfo.getId()==null){
             throw new BlogException("用户不存在");
         }
@@ -88,6 +95,11 @@ public class UserServiceImpl implements UserService {
         try {
             int row = userInfoMapper.insert(userInfo);
             if(row == 1) {
+                //存储数据到redis中
+                //redis 存储失败, 会导致查询时查不到信息, 那么就从数据库中去查询, 此处异常不处理
+                redis.set(redis.buildKey(USER_PREFIX, userInfo.getUserName()),
+                        JSONUtils.toJSON(userInfo),
+                        EXPIRE_TIME);
                 return userInfo.getId();
             }else {
                 throw new BlogException("用户注册失败");
@@ -97,6 +109,30 @@ public class UserServiceImpl implements UserService {
             throw new BlogException("用户注册失败");
         }
     }
+
+    private UserInfo queryUserInfo(String userName) {
+        //先从Redis当中获取数据
+        String key = redis.buildKey(userName);
+        //看key是否存在
+        boolean exists = redis.hasKey(key);
+        if(exists) {
+            //从Redis中获取数据
+            log.info("从redis中获取数据, key:{}", key);
+            String userJson = redis.get(key);
+            //将字符串转为对象
+            UserInfo userInfo = JSONUtils.parseJson(userJson, UserInfo.class);
+            return userInfo == null ? selectUserInfoByName(userName):userInfo;
+        }else {
+            //从数据库当中获取数据
+            log.info("从mysql中获取数据, userName:{}", userName);
+            UserInfo userInfo = selectUserInfoByName(userName);
+            //把数据库的数据存储到Redis当中
+            redis.set(key,JSONUtils.toJSON(userInfo),EXPIRE_TIME);
+            return userInfo;
+        }
+    }
+
+
 
     private void checkUserInfo(UserInfoRegisterRequest param) {
         //用户名不能重复
@@ -121,5 +157,7 @@ public class UserServiceImpl implements UserService {
         return userInfoMapper.selectOne(new LambdaQueryWrapper<UserInfo>()
                 .eq(UserInfo::getId, userId).eq(UserInfo::getDeleteFlag, 0));
     }
+
+
 
 }

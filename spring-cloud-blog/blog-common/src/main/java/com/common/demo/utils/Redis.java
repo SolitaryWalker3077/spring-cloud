@@ -11,6 +11,10 @@ public class Redis {
 
     private StringRedisTemplate redisTemplate;
 
+    private static final String REDIS_SPLIT = ":";
+    private static final String REDIS_DEFAULT_PREFIX = "default";
+
+
     public Redis(StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
@@ -74,5 +78,21 @@ public class Redis {
             log.error("redis set error, key:{}, value:{}", key, value);
             return false;
         }
+    }
+
+
+    public String buildKey(String prefix,String... args) {
+        //1 zhangsan    user:1:zhangsan
+        if (prefix==null){
+            prefix = REDIS_DEFAULT_PREFIX;
+        }
+        StringBuilder key = new StringBuilder();
+        key.append(prefix);
+        if (args!=null){
+            for (String arg: args){
+                key.append(REDIS_SPLIT).append(arg);
+            }
+        }
+        return key.toString();
     }
 }
