@@ -1,10 +1,10 @@
 package com.user.demo.service.impl;
 
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.nacos.shaded.io.grpc.internal.JsonUtil;
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.blog.api.demo.BlogServiceApi;
 import com.blog.api.demo.pojo.response.BlogInfoResponse;
+import com.common.demo.constant.Constants;
 import com.common.demo.exception.BlogException;
 import com.common.demo.pojo.Result;
 import com.common.demo.utils.*;
@@ -17,6 +17,7 @@ import com.user.demo.dataobject.UserInfo;
 import com.user.demo.mapper.UserInfoMapper;
 import com.user.demo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,8 @@ public class UserServiceImpl implements UserService {
     //超时时间为2周
     private static final long EXPIRE_TIME = 14 * 24 * 60* 60;
     private static final String USER_PREFIX = "user";
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @Override
     public UserLoginResponse login(UserInfoRequest user) {
@@ -100,6 +103,11 @@ public class UserServiceImpl implements UserService {
                 redis.set(redis.buildKey(USER_PREFIX, userInfo.getUserName()),
                         JSONUtils.toJSON(userInfo),
                         EXPIRE_TIME);
+
+                //发送消息
+                //建议单独设置一个对象,当需要传什么就设置什么属性
+                userInfo.setPassword("");
+                rabbitTemplate.convertAndSend(Constants.USER_EXCHANGE_NAME, "", JSONUtils.toJSON(userInfo));
                 return userInfo.getId();
             }else {
                 throw new BlogException("用户注册失败");
