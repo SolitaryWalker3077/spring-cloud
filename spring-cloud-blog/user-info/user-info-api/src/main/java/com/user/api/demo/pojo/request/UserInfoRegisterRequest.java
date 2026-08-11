@@ -21,7 +21,7 @@ public class UserInfoRegisterRequest {
 
 
     @NotBlank(message = "邮箱不能为空")
-    @Length(max = 20, message = "邮箱长度不能超过20")
+    @Length(max = 50, message = "邮箱长度不能超过20")
     private String email;
 
 }

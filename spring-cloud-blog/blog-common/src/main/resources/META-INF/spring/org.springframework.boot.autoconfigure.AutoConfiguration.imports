@@ -1,1 +1,2 @@
 com.common.demo.config.RedisConfig
+com.common.demo.config.MailConfig

@@ -30,6 +30,15 @@ spring:
     listener:
       simple:
         acknowledge-mode: manual #配置⼿动确认
+  mail:
+    host: smtp.qq.com
+    username: 2925928087@qq.com   # 登录账户
+    password: hyhthjhcufdjdfea  # 登录密码/授权码
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
