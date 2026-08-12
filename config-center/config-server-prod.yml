@@ -1,5 +1,0 @@
-data:
-  env: config-prod
-  user:
-    username: config-prod
-    password: config-prod
