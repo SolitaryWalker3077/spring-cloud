@@ -1,0 +1,12 @@
+server:
+  port: 7071
+spring:
+  application:
+    name: config-server  # 应用名称
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/SolitaryWalker3077/spring-cloud.git  #配置文件Git 地址
+          default-label: main #配置文件分支
+          search-paths: config-center  #配置文件所在根目录

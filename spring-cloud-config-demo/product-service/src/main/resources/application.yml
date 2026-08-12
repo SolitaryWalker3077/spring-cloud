@@ -1,0 +1,17 @@
+server:
+  port: 9090
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/cloud_product?characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+# 设置 Mybatis 的 xml 保存路径
+mybatis:
+  configuration: # 配置打印 MyBatis 执行的 SQL
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true  #自动驼峰转换
+logging:
+  pattern:
+    console: '%d{HH:mm:ss.SSS} %c %M %L [%thread] %m%n'
+    file: '%d{HH:mm:ss.SSS} %c %M %L [%thread] %m%n'
