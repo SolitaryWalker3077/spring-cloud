@@ -1,0 +1,29 @@
+spring:
+  profiles:
+    active: prod
+  application:
+    name: product-service
+#  cloud:
+#    config:
+#      uri: http://127.0.0.1:7071
+
+#配置两个版本的配置，并通过 spring.profiles.active 设置当前使⽤的版本
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  cloud:
+    config:
+      uri: http://127.0.0.1:7071
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  cloud:
+    config:
+      uri: http://127.0.0.1:7071
+
+
