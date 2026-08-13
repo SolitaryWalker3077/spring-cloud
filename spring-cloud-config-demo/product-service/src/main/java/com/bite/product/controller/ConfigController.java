@@ -12,8 +12,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class ConfigController {
     @Value("${data.env}")
     private String env;
+
+    @Value("${data.password}")
+    private String password;
+
     @RequestMapping("/getEnv")
     public String getEnv(){
         return "env:"+ env;
+    }
+
+
+    @RequestMapping("/getPassword")
+    public String getPassword() {
+        return "password:"+password;
     }
 }

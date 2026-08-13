@@ -1,0 +1,11 @@
+#encrypt:
+#  key: jinan2925 #对称加密相关配置
+
+
+#非对称加密
+encrypt:
+  key-store:
+    location: config-server.keystore #keystore⽂件存储路径
+    alias: config-server #密钥别名
+    password: config #storepass密钥仓库
+    secret: config #keypass ⽤来保护所⽣成密钥对中的密钥

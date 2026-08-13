@@ -6,6 +6,8 @@ spring:
     username: root
     password: Cz.200406146737
     driver-class-name: com.mysql.cj.jdbc.Driver
+  rabbitmq:
+    addresses: amqp://admin:admin@43.140.242.83:5672/study
 # 设置 Mybatis 的 xml 保存路径
 mybatis:
   configuration: # 配置打印 MyBatis 执行的 SQL
