@@ -12,7 +12,8 @@ spring:
     sentinel:
       transport:
         dashboard: 127.0.0.1:8100 #sentinel控制台地址
-        client-ip: 127.0.0.1opencode
+        client-ip: 127.0.0.1
+      web-context-unify: false
 
     loadbalancer:
       nacos:
