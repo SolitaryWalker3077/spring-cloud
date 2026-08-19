@@ -5,6 +5,7 @@ import com.seata.order.api.StorageApi;
 import com.seata.order.entity.OrderInfo;
 import com.seata.order.mapper.OrderMapper;
 import com.seata.order.service.OrderService;
+import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class OrderServiceImpl implements OrderService {
     private OrderMapper orderMapper;
 
     @Override
+    @GlobalTransactional
     public Long create(OrderInfo orderInfo) {
         try {
             //插入订单
